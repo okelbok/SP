@@ -123,21 +123,21 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="AboutDialogBox.cpp" />
-    <ClCompile Include="MainMenu.cpp" />
+    <ClCompile Include="Components\AboutDialogBox.cpp" />
+    <ClCompile Include="Components\MainMenu.cpp" />
     <ClCompile Include="TextEditor.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AboutDialogBox.h" />
-    <ClInclude Include="MainMenu.h" />
-    <ClInclude Include="Resource.h" />
+    <ClInclude Include="Components\AboutDialogBox.h" />
+    <ClInclude Include="Components\MainMenu.h" />
+    <ClInclude Include="Resources\resource.h" />
     <ClInclude Include="TextEditor.h" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="TextEditor.rc" />
+    <ResourceCompile Include="Resources\TextEditor.rc" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="favicon.ico" />
+    <Image Include="Resources\Icons\favicon.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

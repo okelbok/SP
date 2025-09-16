@@ -1,8 +1,8 @@
 #include "TextEditor.h"
 
-#include "Resource.h"
-#include "MainMenu.h"
-#include "AboutDialogBox.h"
+#include "Resources/resource.h"
+#include "Components/MainMenu.h"
+#include "Components/AboutDialogBox.h"
 
 void RespondToPaintMessage(HWND hWnd)
 {

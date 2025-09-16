@@ -19,15 +19,18 @@
     <Filter Include="Header Files\Components">
       <UniqueIdentifier>{d6d74683-d1a2-40ad-adf6-12b0409c5a0a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\Icons">
+      <UniqueIdentifier>{f95b033d-bcda-4225-8ce0-af815c9658a6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="TextEditor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MainMenu.cpp">
+    <ClCompile Include="Components\AboutDialogBox.cpp">
       <Filter>Source Files\Components</Filter>
     </ClCompile>
-    <ClCompile Include="AboutDialogBox.cpp">
+    <ClCompile Include="Components\MainMenu.cpp">
       <Filter>Source Files\Components</Filter>
     </ClCompile>
   </ItemGroup>
@@ -35,24 +38,24 @@
     <ClInclude Include="TextEditor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Resource.h">
+    <ClInclude Include="Components\AboutDialogBox.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\MainMenu.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Resources\resource.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MainMenu.h">
-      <Filter>Header Files\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="AboutDialogBox.h">
-      <Filter>Header Files\Components</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="TextEditor.rc">
+    <ResourceCompile Include="Resources\TextEditor.rc">
       <Filter>Resource Files</Filter>
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="favicon.ico">
-      <Filter>Resource Files</Filter>
+    <Image Include="Resources\Icons\favicon.ico">
+      <Filter>Resource Files\Icons</Filter>
     </Image>
   </ItemGroup>
 </Project>
