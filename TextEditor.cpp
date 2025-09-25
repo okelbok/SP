@@ -78,6 +78,11 @@ LRESULT CALLBACK TextEditorWindowProc(
 
         break;
 
+    case WM_NCPAINT:
+        ResetInactivityTimer(hWnd);
+
+        return DefWindowProc(hWnd, message, wParam, lParam);
+
     case WM_PAINT:
         return RespondToPaintMessage(hWnd, message, wParam, lParam);
 
