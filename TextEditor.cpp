@@ -62,6 +62,8 @@ LRESULT CALLBACK TextEditorWindowProc(
     LPARAM lParam
 )
 {
+    HWND hSpriteWnd = g_hSpriteWnd;
+
     switch (message)
     {
     case WM_CREATE:
@@ -113,6 +115,10 @@ LRESULT CALLBACK TextEditorWindowProc(
         break;
 
     case WM_COMMAND:
+        g_hSpriteWnd = NULL;
+
+        KillTimer(hWnd, IDT_INACTIVITY_TIMER);
+
         MessageBox(
             hWnd,
             L"WM_COMMAND message has been received.",
@@ -123,8 +129,12 @@ LRESULT CALLBACK TextEditorWindowProc(
         if (wParam == IDM_HELP_ABOUT)
         {
             DisplayAboutDialogBox(g_hInstance, hWnd);
+            
             SetActiveWindow(hWnd);
         }
+
+        SetTimer(hWnd, IDT_INACTIVITY_TIMER, INACTIVITY_TIMEOUT, NULL);
+        g_hSpriteWnd = hSpriteWnd;
 
         break;
 
