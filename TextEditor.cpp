@@ -1,22 +1,58 @@
 #include "TextEditor.h"
 
+#include <ctime>
+
 #include "Resources/resource.h"
 #include "Components/MainMenu.h"
 #include "Components/AboutDialogBox.h"
+#include "Components/SpriteWindow.h"
 
-void RespondToPaintMessage(HWND hWnd)
+HINSTANCE g_hInstance;
+HWND g_hSpriteWnd = NULL;
+
+LRESULT RespondToPaintMessage(
+    HWND hWnd,
+    UINT message,
+    WPARAM wParam,
+    LPARAM lParam
+)
 {
     PAINTSTRUCT paintStruct;
     HDC hdc = BeginPaint(hWnd, &paintStruct);
+    LRESULT result;
 
-    MessageBox(
-        hWnd,
-        L"WM_PAINT message has been received.",
-        L"Message Capture Info",
-        MB_OK | MB_ICONINFORMATION
-    );
+    if (g_hSpriteWnd != NULL)
+    {
+        result = 0;
+    }
+    else
+    {
+        MessageBox(
+            hWnd,
+            L"WM_PAINT message has been received.",
+            L"Message Capture Info",
+            MB_OK | MB_ICONINFORMATION
+        );
+
+        result = DefWindowProc(hWnd, message, wParam, lParam);
+    }
 
     EndPaint(hWnd, &paintStruct);
+
+    return result;
+}
+
+void ResetInactivityTimer(HWND hWnd)
+{
+    KillTimer(hWnd, IDT_INACTIVITY_TIMER);
+
+    if (g_hSpriteWnd != NULL)
+    {
+        DestroySpriteWindow(g_hSpriteWnd);
+        g_hSpriteWnd = NULL;
+    }
+
+    SetTimer(hWnd, IDT_INACTIVITY_TIMER, INACTIVITY_TIMEOUT, NULL);
 }
 
 LRESULT CALLBACK TextEditorWindowProc(
@@ -28,11 +64,9 @@ LRESULT CALLBACK TextEditorWindowProc(
 {
     switch (message)
     {
-    case WM_PAINT:
-        RespondToPaintMessage(hWnd);
-        return DefWindowProc(hWnd, message, wParam, lParam);
-
     case WM_CREATE:
+        SetTimer(hWnd, IDT_INACTIVITY_TIMER, INACTIVITY_TIMEOUT, NULL);
+        
         MessageBox(
             hWnd,
             L"WM_CREATE message has been received.",
@@ -42,15 +76,40 @@ LRESULT CALLBACK TextEditorWindowProc(
 
         break;
 
-    case WM_DESTROY:
-        MessageBox(
-            hWnd,
-            L"WM_DESTROY message has been received.",
-            L"Message Capture Info",
-            MB_OK | MB_ICONINFORMATION
-        );
+    case WM_PAINT:
+        return RespondToPaintMessage(hWnd, message, wParam, lParam);
 
-        PostQuitMessage(0);
+    case WM_TIMER:
+        if (wParam == IDT_INACTIVITY_TIMER)
+        {
+            if (g_hSpriteWnd == NULL)
+            {
+                g_hSpriteWnd = DisplaySpriteWindow(g_hInstance, hWnd);
+            }
+        }
+
+        break;
+
+    case WM_PARENTNOTIFY:
+        switch (LOWORD(wParam))
+        {
+        case WM_LBUTTONDOWN:
+        case WM_MBUTTONDOWN:
+        case WM_RBUTTONDOWN:
+            ResetInactivityTimer(hWnd);
+        }
+
+        break;
+
+    case WM_MOUSEMOVE:
+        if (g_hSpriteWnd != NULL)
+        {
+            break;
+        }
+
+    case WM_KEYDOWN:
+        ResetInactivityTimer(hWnd);
+
         break;
 
     case WM_COMMAND:
@@ -66,6 +125,19 @@ LRESULT CALLBACK TextEditorWindowProc(
             DisplayAboutDialogBox(g_hInstance, hWnd);
             SetActiveWindow(hWnd);
         }
+
+        break;
+
+    case WM_DESTROY:
+        MessageBox(
+            hWnd,
+            L"WM_DESTROY message has been received.",
+            L"Message Capture Info",
+            MB_OK | MB_ICONINFORMATION
+        );
+
+        KillTimer(hWnd, IDT_INACTIVITY_TIMER);
+        PostQuitMessage(0);
 
         break;
 
@@ -95,6 +167,7 @@ void RegisterTextEditorClass(HINSTANCE hInstance)
 
     RegisterClassEx(&wcex);
     RegisterAboutDialogBoxClass(hInstance, wcex.hIcon);
+    RegisterSpriteWindowClass(hInstance);
 }
 
 int APIENTRY WinMain(
@@ -104,6 +177,8 @@ int APIENTRY WinMain(
     _In_ int nCmdShow
 )
 {
+    srand(static_cast<unsigned int>(time(NULL)));
+
     g_hInstance = hInstance;
 
     HWND hWnd;
@@ -132,6 +207,7 @@ int APIENTRY WinMain(
     hMenu = CreateMainMenu();
 
     SetMenu(hWnd, hMenu);
+
     ShowWindow(hWnd, nCmdShow);
     UpdateWindow(hWnd);
 

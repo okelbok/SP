@@ -11,16 +11,22 @@ LRESULT CALLBACK AboutDialogBoxProc(
     {
     case WM_CLOSE:
         DestroyWindow(hWnd);
+
         break;
+
     case WM_DESTROY:
         PostQuitMessage(0);
+
         break;
+
     case WM_COMMAND:
         if (LOWORD(wParam) == IDOK)
         {
             DestroyWindow(hWnd);
         }
+
         break;
+
     default:
         return DefWindowProc(hWnd, message, wParam, lParam);
     }
@@ -100,6 +106,7 @@ void DisplayAboutDialogBox(HINSTANCE hInstance, HWND hWnd)
 
     ShowWindow(hAboutDialogBoxWnd, SW_SHOWNORMAL);
     UpdateWindow(hAboutDialogBoxWnd);
+
     EnableWindow(hWnd, false);
 
     AddAboutInfo(hInstance, hAboutDialogBoxWnd);

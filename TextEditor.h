@@ -1,7 +1,9 @@
 #pragma once
 #include <windows.h>
 
-HINSTANCE g_hInstance;
+#define IDT_INACTIVITY_TIMER 10001
+
+#define INACTIVITY_TIMEOUT   3000
 
 void RegisterTextEditorClass(HINSTANCE hInstance);
 LRESULT CALLBACK TextEditorWindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
