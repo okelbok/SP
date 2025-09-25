@@ -6,3 +6,6 @@
 /TextEditor/x64
 /x64
 TextEditor.vcxproj*
+/TextEditor.vcxproj
+/TextEditor.vcxproj.filters
+/.vs
